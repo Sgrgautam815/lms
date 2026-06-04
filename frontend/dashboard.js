@@ -8,7 +8,7 @@
     window.fetch = function(input, init) {
         if (typeof input === 'string' && input.includes('https://lms-dra8.onrender.com')) {
             const apiBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
-                ? 'https://lms-dra8.onrender.com'
+                ? 'http://localhost:3000'
                 : 'https://lms-dra8.onrender.com';
             input = input.replace('https://lms-dra8.onrender.com', apiBase);
         }

@@ -141,6 +141,36 @@ if (!fs.existsSync("uploads")) {
 }
 
 // ========================================
+// LIGHTWEIGHT RATE LIMITER (In-Memory)
+// ========================================
+const rateLimitCache = {};
+const rateLimiter = (limit, windowMs) => {
+    return (req, res, next) => {
+        const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const now = Date.now();
+        
+        if (!rateLimitCache[ip]) {
+            rateLimitCache[ip] = [];
+        }
+        
+        // Filter out requests older than windowMs
+        rateLimitCache[ip] = rateLimitCache[ip].filter(timestamp => now - timestamp < windowMs);
+        
+        if (rateLimitCache[ip].length >= limit) {
+            console.warn(`⚠️ [Rate Limit] Blocked IP: ${ip} for exceeding request threshold.`);
+            return res.status(429).json({
+                success: false,
+                message: "Too many authentication requests from this IP. Please try again after some time."
+            });
+        }
+        
+        rateLimitCache[ip].push(now);
+        next();
+    };
+};
+const authLimiter = rateLimiter(15, 15 * 60 * 1000); // 15 requests per 15 minutes
+
+// ========================================
 // REQUEST LOGGING MIDDLEWARE (Debug Helper)
 // ========================================
 app.use((req, res, next) => {
@@ -187,7 +217,31 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+    // Allowed extensions
+    const allowedExtensions = /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|ppt|pptx|txt|zip|rar/;
+    const extName = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+    
+    // Allowed mime types
+    const allowedMimeTypes = /image\/jpeg|image\/png|image\/gif|application\/pdf|application\/msword|application\/vnd.openxmlformats-officedocument.wordprocessingml.document|application\/vnd.ms-excel|application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application\/vnd.ms-powerpoint|application\/vnd.openxmlformats-officedocument.presentationml.presentation|text\/plain|application\/zip|application\/x-zip-compressed|application\/x-rar-compressed/;
+    const mimeType = allowedMimeTypes.test(file.mimetype);
+
+    // Strict block on dangerous extensions
+    const dangerousExtensions = /html|htm|js|jsp|php|sh|exe|bat|cmd|svg/;
+    const isDangerous = dangerousExtensions.test(path.extname(file.originalname).toLowerCase());
+
+    if (extName && mimeType && !isDangerous) {
+        return cb(null, true);
+    } else {
+        cb(new Error("Error: File upload blocked - Only standard documents and image files are allowed. Dangerous file types (.html, .js, .svg, .exe, etc.) are strictly prohibited."));
+    }
+};
+
+const upload = multer({ 
+    storage,
+    fileFilter,
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
 
 // Routes
 app.get("/", (req, res) => {
@@ -199,7 +253,7 @@ app.get("/test", (req, res) => {
 });
 
 // Registration with Enhanced Validation
-app.post("/register", async (req, res) => {
+app.post("/register", authLimiter, async (req, res) => {
     try {
         const { name, course, email, password, phone, address, role, section, subjects } = req.body;
 
@@ -308,7 +362,7 @@ app.post("/register", async (req, res) => {
     }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", authLimiter, async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -391,7 +445,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/forgot-password", async (req, res) => {
+app.post("/forgot-password", authLimiter, async (req, res) => {
     try {
         const { email, newPassword } = req.body;
         if (!email || !newPassword) return res.status(400).json({ message: "Email and new password are required" });
@@ -448,7 +502,7 @@ app.put("/users/:collegeId", authMiddleware, authorize(["admin"]), async (req, r
 // ==========================================
 // TEACHER REGISTRATION
 // ==========================================
-app.post("/teacher-register", async (req, res) => {
+app.post("/teacher-register", authLimiter, async (req, res) => {
     try {
         const { name, teacherId, email, password, phone, department, qualification, experience, assignedCourses, assignedSubjects } = req.body;
 
@@ -487,7 +541,7 @@ app.post("/teacher-register", async (req, res) => {
 // ==========================================
 // TEACHER LOGIN
 // ==========================================
-app.post("/teacher-login", async (req, res) => {
+app.post("/teacher-login", authLimiter, async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ message: "Email and password are required" });
@@ -898,7 +952,7 @@ app.put("/enroll-subjects/:id", authMiddleware, authorize(["admin", "student"]),
 // =====================================================
 // ADMIN REGISTRATION (Seed/Setup — protect in prod)
 // =====================================================
-app.post("/admin-register", async (req, res) => {
+app.post("/admin-register", authLimiter, async (req, res) => {
     try {
         const { name, email, password, setupKey } = req.body;
 
@@ -931,7 +985,7 @@ app.post("/admin-register", async (req, res) => {
 // =====================================================
 // ADMIN LOGIN
 // =====================================================
-app.post("/admin-login", async (req, res) => {
+app.post("/admin-login", authLimiter, async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ message: "Email and password required" });
