@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | College LMS</title>
+    <meta name="description" content="Secure administrator login for College LMS management system.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        :root {
+            --admin-red:    #ff4757;
+            --admin-amber:  #ffa502;
+            --admin-gold:   #f5a623;
+            --admin-glow:   rgba(255, 71, 87, 0.28);
+        }
+
+        body {
+            background:
+                radial-gradient(ellipse 70% 55% at 15% 5%,  rgba(255, 71, 87, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 95%, rgba(245, 166, 35, 0.08) 0%, transparent 60%),
+                linear-gradient(160deg, #050408 0%, #0c0608 55%, #100a06 100%);
+        }
+
+        .login-card {
+            max-width: 440px;
+            border-color: rgba(255, 71, 87, 0.15);
+            animation: cardFadeUp 0.6s ease both;
+        }
+        @keyframes cardFadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .admin-icon {
+            width: 72px; height: 72px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #c0392b, #ff4757);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin: 0 auto 18px;
+            box-shadow: 0 8px 28px var(--admin-glow);
+        }
+
+        .admin-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255, 71, 87, 0.08);
+            border: 1px solid rgba(255, 71, 87, 0.28);
+            color: var(--admin-red);
+            padding: 6px 16px; border-radius: 30px;
+            font-size: 0.73rem; font-weight: 700;
+            letter-spacing: 1.8px; text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .input-group input:focus {
+            border-color: var(--admin-red) !important;
+            box-shadow: 0 0 16px var(--admin-glow) !important;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #c0392b, #ff4757) !important;
+            color: #fff !important;
+            box-shadow: 0 6px 22px var(--admin-glow) !important;
+        }
+        .primary-btn:hover {
+            box-shadow: 0 10px 36px rgba(255,71,87,0.55) !important;
+            transform: translateY(-2px);
+        }
+        .primary-btn.loading {
+            opacity: 0.7; cursor: not-allowed; pointer-events: none;
+        }
+        .primary-btn.loading::after {
+            content: '';
+            display: inline-block; width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff; border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-left: 10px; vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .alert-box {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 13px 16px; border-radius: 12px;
+            font-size: 0.875rem; margin-bottom: 18px;
+            animation: shakeIn 0.4s ease;
+        }
+        .alert-error  { background: rgba(255,71,87,0.10);  border: 1px solid rgba(255,71,87,0.30);  color: #fca5a5; }
+        .alert-success{ background: rgba(34,197,94,0.10);  border: 1px solid rgba(34,197,94,0.30);  color: #86efac; }
+        @keyframes shakeIn {
+            0%   { transform: translateX(-8px); opacity: 0; }
+            30%  { transform: translateX(6px); }
+            60%  { transform: translateX(-3px); }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .security-warning {
+            background: rgba(255,165,2,0.06);
+            border: 1px solid rgba(255,165,2,0.2);
+            border-radius: 12px; padding: 12px 16px;
+            font-size: 0.8rem; color: rgba(255,165,2,0.9);
+            margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-start;
+        }
+
+        .link-row {
+            display: flex; justify-content: center; gap: 24px;
+            margin-top: 20px; font-size: 0.85rem;
+        }
+        .link-row a {
+            color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.25s;
+        }
+        .link-row a:hover { color: var(--admin-red); }
+    </style>
+</head>
+<body>
+    <div class="particle particle-1" aria-hidden="true"></div>
+    <div class="particle particle-2" aria-hidden="true"></div>
+    <div class="particle particle-3" aria-hidden="true"></div>
+
+    <header class="main-header">
+        <div class="logo-area">
+            <a href="../index.html" class="back-link">← Student Portal</a>
+        </div>
+        <div class="logo-area">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            <h1>College LMS</h1>
+        </div>
+    </header>
+
+    <main class="content-area" role="main">
+        <section class="login-card" aria-labelledby="adminLoginTitle">
+
+            <div class="admin-icon" aria-hidden="true">🛡️</div>
+            <div class="admin-badge"><i class="fas fa-shield-halved"></i> Admin Portal</div>
+
+            <h2 id="adminLoginTitle" style="text-align:center; margin-bottom:6px; font-size:1.7rem;">Administrator Login</h2>
+            <p class="subtitle">Restricted access — authorised personnel only</p>
+
+            <!-- Security Notice -->
+            <div class="security-warning">
+                <span>⚠️</span>
+                <span>This portal is for LMS administrators only. All login attempts are logged and monitored.</span>
+            </div>
+
+            <!-- Alert Box -->
+            <div id="alertBox" style="display:none;" role="alert" aria-live="assertive"></div>
+
+            <form id="adminLoginForm" novalidate>
+                <div class="input-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" placeholder="admin@college.edu"
+                           required autocomplete="email" aria-required="true">
+                </div>
+                <div class="input-group">
+                    <label for="adminPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="adminPassword" placeholder="Admin password"
+                               required autocomplete="current-password" aria-required="true">
+                        <span id="togglePwd" class="toggle-password" role="button" tabindex="0" title="Toggle">👁️</span>
+                    </div>
+                </div>
+
+                <div class="button-group" style="margin-top:10px;">
+                    <button type="submit" id="loginBtn" class="btn primary-btn">
+                        <i class="fas fa-lock-open"></i>&nbsp; Sign In to Admin Panel
+                    </button>
+                </div>
+            </form>
+
+            <div class="link-row">
+                <a href="../index.html">← Student Portal</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 College LMS Admin — Restricted Area</p>
+    </footer>
+
+    <script src="login.js"></script>
+</body>
+</html>
+

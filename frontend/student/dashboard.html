@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | College LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">🎓 LMS PORTAL</div>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="showStudentTab('subjects', this)" id="tabSubjects">
+                        <span>📚</span><b>My Subjects</b>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showStudentTab('timetable', this)" id="tabTimetable">
+                        <span>📅</span><b>Timetable</b>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showStudentTab('marks', this)" id="tabMarks">
+                        <span>🏆</span><b>My Marks</b>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showStudentTab('attendance', this)" id="tabAttendance">
+                        <span>📋</span><b>Attendance</b>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showStudentTab('assignments', this)" id="tabAssignments">
+                        <span>📝</span><b>Assignments</b>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="user-profile-summary">
+                    <div class="avatar" id="userInitial">S</div>
+                    <div class="user-info">
+                        <h4 id="userNameDisplay">Student Name</h4>
+                        <p id="userCourseDisplay">Course Name</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="notification-icon">🔔</span>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <!-- PROFILE SUMMARY CARDS -->
+            <div class="profile-summary-grid">
+                <div class="summary-card">
+                    <span>🆔</span>
+                    <h5>College ID</h5>
+                    <p id="profileCollegeId">---</p>
+                </div>
+                <div class="summary-card">
+                    <span>📚</span>
+                    <h5>Major</h5>
+                    <p id="profileCourse">---</p>
+                </div>
+                <div class="summary-card">
+                    <span>📈</span>
+                    <h5>Attendance</h5>
+                    <p id="profileAttendance">0%</p>
+                </div>
+                <div class="summary-card">
+                    <span>🗓️</span>
+                    <h5>Semester</h5>
+                    <p id="profileSemester">Sem 4</p>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT SECTIONS -->
+            <section id="studentPortalSection">
+
+                <!-- MY SUBJECTS -->
+                <div id="studentTabSubjects" class="student-tab-content student-section-card">
+                    <h2>📚 Enrolled Subjects</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">View your academic progress for all assigned courses.</p>
+                    <div id="enrolledSubjectsGrid" class="students-grid">
+                        <div class="empty-state">
+                            <h3>Loading subjects... ⏳</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TIMETABLE -->
+                <div id="studentTabTimetable" class="student-tab-content student-section-card" style="display: none;">
+                    <h2>📅 Weekly Schedule</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">Stay on top of your classes and labs.</p>
+                    <div class="timetable-container">
+                        <table id="timetableTable">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Monday</th>
+                                    <th>Tuesday</th>
+                                    <th>Wednesday</th>
+                                    <th>Thursday</th>
+                                    <th>Friday</th>
+                                    <th>Saturday</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- MARKS -->
+                <div id="studentTabMarks" class="student-tab-content student-section-card" style="display: none;">
+                    <h2>🏆 Academic Performance</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">Detailed breakdown of your subject scores.</p>
+                    <div id="studentMarksGrid" class="students-grid">
+                        <div class="empty-state">
+                            <h3>Loading marks... ⏳</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ATTENDANCE -->
+                <div id="studentTabAttendance" class="student-tab-content student-section-card" style="display: none;">
+                    <h2>📋 Attendance Overview</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">Monitor your presence across all courses.</p>
+                    <div id="studentAttendanceGrid" class="students-grid">
+                        <div class="empty-state">
+                            <h3>Loading attendance... ⏳</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ASSIGNMENTS -->
+                <div id="studentTabAssignments" class="student-tab-content student-section-card" style="display: none;">
+                    <h2>📝 Assignments & Tasks</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">Track upcoming deadlines and project submissions.</p>
+                    <div id="studentAssignmentsGrid" class="students-grid">
+                        <div class="empty-state">
+                            <h3>Loading assignments... ⏳</h3>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Portal | College LMS</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Premium Styles -->
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Data Viz -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>LMS PORTAL</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a onclick="switchTab('dashboard')" class="menu-item active" id="menu-dashboard">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </a>
+            <a onclick="switchTab('students')" class="menu-item" id="menu-students">
+                <i class="fas fa-user-graduate"></i>
+                <span>Students</span>
+            </a>
+            <a onclick="switchTab('attendance')" class="menu-item" id="menu-attendance">
+                <i class="fas fa-calendar-check"></i>
+                <span>Attendance</span>
+            </a>
+            <a onclick="switchTab('marks')" class="menu-item" id="menu-marks">
+                <i class="fas fa-file-invoice"></i>
+                <span>Marks</span>
+            </a>
+            <a onclick="switchTab('assignments')" class="menu-item" id="menu-assignments">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+            <a onclick="switchTab('analytics')" class="menu-item" id="menu-analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-profile">
+            <div class="profile-img" id="userInitial">T</div>
+            <div class="profile-info">
+                <p style="font-weight: 600; font-size: 14px;" id="userNameSidebar">Professor</p>
+                <p style="font-size: 12px; color: var(--text-muted);">Faculty Member</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by name, roll, or course...">
+            </div>
+            
+            <div class="topbar-actions">
+                <span class="badge">Semester 4 • 2026</span>
+                <button class="icon-btn">
+                    <i class="far fa-bell"></i>
+                </button>
+                <button id="logoutBtn" class="icon-btn" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2);">
+                    <i class="fas fa-power-off"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- WELCOME SECTION -->
+        <div class="section-header">
+            <div>
+                <h1 id="welcomeMsg" style="font-size: 32px; margin-bottom: 5px;">Welcome back, Prof! 👋</h1>
+                <p style="color: var(--text-muted);">Here's what's happening in your classes today.</p>
+            </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(0, 240, 255, 0.1); color: var(--primary-neon);">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statTotalStudents">0</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(123, 44, 191, 0.1); color: var(--accent-purple);">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statActiveCourses">0</h3>
+                    <p>Active Courses</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statAttendance">0%</h3>
+                    <p>Attendance Rate</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statAssignments">0</h3>
+                    <p>Pending Review</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN DYNAMIC SECTION -->
+        <section id="mainSection" class="dashboard-section">
+            
+            <div class="section-header">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button id="backNavBtn" style="display: none;" class="quick-btn"><i class="fas fa-arrow-left"></i> Back</button>
+                    <h2 id="breadcrumbNav">Enrolled Courses</h2>
+                </div>
+            </div>
+
+            <!-- GRID FOR COURSES/STUDENTS -->
+            <div id="studentsGrid" class="grid-container">
+                <!-- Shimmer Loading State -->
+                <div class="glass-card loading-skeleton" style="height: 200px;"></div>
+                <div class="glass-card loading-skeleton" style="height: 200px;"></div>
+                <div class="glass-card loading-skeleton" style="height: 200px;"></div>
+                <div class="glass-card loading-skeleton" style="height: 200px;"></div>
+            </div>
+        </section>
+
+        <!-- ANALYTICS SECTION -->
+        <section id="analyticsSection" class="dashboard-section" style="display: none;">
+            <div class="section-header">
+                <h2>Performance Analytics 📈</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                <div class="glass-card">
+                    <h3>Attendance Overview</h3>
+                    <canvas id="attendanceChart" style="margin-top: 20px;"></canvas>
+                </div>
+                <div class="glass-card">
+                    <h3>Grade Performance</h3>
+                    <canvas id="performanceChart" style="margin-top: 20px;"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ATTENDANCE FORM SECTION -->
+        <section id="attendanceSection" class="dashboard-section" style="display: none;">
+            <div class="section-header">
+                <h2>Mark Attendance</h2>
+            </div>
+            <div class="form-container">
+                <form id="attendanceForm">
+                    <select id="attendanceStudent" class="input-field" required>
+                        <option value="" disabled selected>Select Student...</option>
+                    </select>
+                    <input type="hidden" id="attendanceRoll">
+                    <select id="attendanceSubject" class="input-field" required>
+                        <option value="" disabled selected>Select Subject...</option>
+                    </select>
+                    <input type="number" id="presentClasses" class="input-field" placeholder="Present Classes" required>
+                    <input type="number" id="totalClasses" class="input-field" placeholder="Total Classes" required>
+                    <button type="submit" class="submit-btn">Update Attendance</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- MARKS FORM SECTION -->
+        <section id="marksSection" class="dashboard-section" style="display: none;">
+            <div class="section-header">
+                <h2>Submit Academic Marks</h2>
+            </div>
+            <div class="form-container">
+                <form id="marksForm">
+                    <select id="marksStudent" class="input-field" required>
+                        <option value="" disabled selected>Select Student...</option>
+                    </select>
+                    <input type="hidden" id="marksRoll">
+                    <select id="marksSubject" class="input-field" required>
+                        <option value="" disabled selected>Select Subject...</option>
+                    </select>
+                    <input type="number" id="marksObtained" class="input-field" placeholder="Marks Obtained" required>
+                    <input type="number" id="totalMarks" class="input-field" placeholder="Total Marks" required>
+                    <button type="submit" class="submit-btn">Save Marks</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ASSIGNMENTS SECTION -->
+        <section id="assignmentsSection" class="dashboard-section" style="display: none;">
+            <div class="section-header">
+                <h2>Create New Assignment</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="glass-card">
+                    <form id="assignmentForm">
+                        <input type="text" id="assignmentTitle" class="input-field" placeholder="Assignment Title" required>
+                        <input type="text" id="assignmentCourse" class="input-field" placeholder="Course Name (e.g. BTECH CSE)" required>
+                        <input type="date" id="assignmentDeadline" class="input-field" required>
+                        <button type="submit" class="submit-btn">Post Assignment</button>
+                    </form>
+                </div>
+                <div class="glass-card">
+                    <h3>Upload Study Material</h3>
+                    <p>Share lecture notes, PDFs, or research papers.</p>
+                    <form id="uploadForm" style="margin-top: 20px;">
+                        <input type="file" id="fileInput" class="input-field" required>
+                        <button type="submit" class="submit-btn" style="background: var(--accent-purple);">Upload File</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Script -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
+

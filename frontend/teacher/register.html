@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Registration | College LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* ── REGISTER PAGE PREMIUM OVERRIDES ─────────────────── */
+        :root {
+            --reg-accent:      #bf5fff;
+            --reg-accent-dark: #7b2cbf;
+            --reg-glow:        rgba(191, 95, 255, 0.28);
+        }
+
+        body {
+            background:
+                radial-gradient(ellipse 70% 55% at 20% 10%, rgba(123, 44, 191, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(191, 95, 255, 0.10) 0%, transparent 60%),
+                linear-gradient(160deg, #04030a 0%, #080612 60%, #0a0818 100%);
+        }
+
+        .login-card {
+            border-color: rgba(191, 95, 255, 0.15);
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: var(--reg-accent) !important;
+            box-shadow: 0 0 16px var(--reg-glow) !important;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--reg-accent-dark), var(--reg-accent)) !important;
+            color: #fff !important;
+            box-shadow: 0 6px 20px var(--reg-glow) !important;
+        }
+        .primary-btn:hover {
+            box-shadow: 0 10px 35px rgba(191, 95, 255, 0.55) !important;
+        }
+
+        .portal-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(191, 95, 255, 0.08);
+            border: 1px solid rgba(191, 95, 255, 0.25);
+            color: var(--reg-accent);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .card-top-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--reg-accent-dark), var(--reg-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            margin: 0 auto 18px;
+            box-shadow: 0 8px 24px var(--reg-glow);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.82rem;
+            text-decoration: none;
+            transition: color 0.25s;
+        }
+        .back-link:hover { color: var(--reg-accent); }
+
+        .register-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .full-width { grid-column: 1 / -1; }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(191, 95, 255, 0.08);
+            border-color: rgba(191, 95, 255, 0.30);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--reg-accent);
+        }
+
+        .checkbox-item.checked {
+            background: rgba(191, 95, 255, 0.10);
+            border-color: rgba(191, 95, 255, 0.50);
+            color: var(--reg-accent);
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            margin-top: 5px;
+        }
+
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            color: #22c55e;
+            text-align: center;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            min-height: 24px;
+            transition: 0.3s;
+        }
+
+        .input-valid {
+            border-color: #00c851 !important;
+            box-shadow: 0 0 8px rgba(0, 200, 81, 0.2);
+        }
+
+        .input-invalid {
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 8px rgba(255, 68, 68, 0.2);
+        }
+
+        /* Entrance animation */
+        .login-card {
+            animation: cardFadeUp 0.7s ease both;
+        }
+        @keyframes cardFadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .link-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+        .link-row a {
+            color: rgba(255,255,255,0.45);
+            text-decoration: none;
+            transition: color 0.25s;
+        }
+        .link-row a:hover { color: var(--reg-accent); }
+
+        select option { background: #0a0818; color: #f0f4ff; }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+
+    <header class="main-header">
+        <div class="logo-area">
+            <a href="login.html" class="back-link" aria-label="Back to teacher login">← Back</a>
+        </div>
+        <div class="logo-area">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            <h1>College LMS</h1>
+        </div>
+    </header>
+
+    <main class="content-area" role="main">
+        <section class="login-card" style="max-width: 700px;" aria-labelledby="regTitle">
+            <div class="card-top-icon" aria-hidden="true">👨‍🏫</div>
+            <div class="portal-badge">👨‍🏫 Faculty Registration</div>
+            <h2 id="regTitle" style="text-align:center; margin-bottom:6px; font-size:1.65rem;">Create Faculty Account</h2>
+            <p class="subtitle">Fill in your details and select your assigned courses &amp; subjects</p>
+
+            <form id="teacherRegisterForm" novalidate>
+                <div class="register-grid">
+
+                    <!-- Full Name -->
+                    <div class="input-group full-width">
+                        <label>Full Name *</label>
+                        <input type="text" id="tName" placeholder="e.g. Dr. Priya Sharma" required>
+                    </div>
+
+                    <!-- Teacher ID -->
+                    <div class="input-group">
+                        <label>Teacher ID *</label>
+                        <input type="text" id="tTeacherId" placeholder="e.g. TCH2026001" required>
+                    </div>
+
+                    <!-- Department -->
+                    <div class="input-group">
+                        <label>Department *</label>
+                        <select id="tDepartment" required style="width:100%;padding:14px;background:rgba(0,0,0,0.2);color:white;border:1px solid rgba(255,255,255,0.1);border-radius:10px;outline:none;">
+                            <option value="" disabled selected>Select Department...</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Electronics & Communication">Electronics & Communication</option>
+                            <option value="Computer Applications">Computer Applications</option>
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                        </select>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="tEmail" placeholder="prof@college.edu" required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label>Password *</label>
+                        <input type="password" id="tPassword" placeholder="Min. 6 chars (A-Z, a-z, 0-9)" required>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="tPhone" placeholder="10-digit number" maxlength="10">
+                    </div>
+
+                    <!-- Qualification -->
+                    <div class="input-group">
+                        <label>Qualification</label>
+                        <input type="text" id="tQualification" placeholder="e.g. Ph.D, M.Tech">
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="input-group">
+                        <label>Years of Experience</label>
+                        <input type="text" id="tExperience" placeholder="e.g. 5 years">
+                    </div>
+
+                    <!-- Assigned Courses -->
+                    <div class="full-width">
+                        <div class="section-label">📂 Assigned Courses (Select all that apply)</div>
+                        <div class="checkbox-grid" id="courseCheckboxes">
+                            <label class="checkbox-item"><input type="checkbox" value="BTECH CSE"> B.Tech - CSE</label>
+                            <label class="checkbox-item"><input type="checkbox" value="BTECH ME"> B.Tech - Mechanical</label>
+                            <label class="checkbox-item"><input type="checkbox" value="BTECH ECE"> B.Tech - Electronics</label>
+                            <label class="checkbox-item"><input type="checkbox" value="BCA"> BCA</label>
+                            <label class="checkbox-item"><input type="checkbox" value="MCA"> MCA</label>
+                            <label class="checkbox-item"><input type="checkbox" value="MBA"> MBA</label>
+                        </div>
+                    </div>
+
+                    <!-- Assigned Subjects -->
+                    <div class="full-width">
+                        <div class="section-label">📚 Assigned Subjects (Select all that apply)</div>
+                        <div class="checkbox-grid" id="subjectCheckboxes">
+                            <label class="checkbox-item"><input type="checkbox" value="Mathematics"> Mathematics</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Physics"> Physics</label>
+                            <label class="checkbox-item"><input type="checkbox" value="DBMS"> DBMS</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Operating System"> Operating System</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Computer Networks"> Computer Networks</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Thermodynamics"> Thermodynamics</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Machine Design"> Machine Design</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Digital Electronics"> Digital Electronics</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Microprocessors"> Microprocessors</label>
+                            <label class="checkbox-item"><input type="checkbox" value="C Programming"> C Programming</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Data Structures"> Data Structures</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Machine Learning"> Machine Learning</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Cloud Computing"> Cloud Computing</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Accounting"> Accounting</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Marketing"> Marketing</label>
+                            <label class="checkbox-item"><input type="checkbox" value="Economics"> Economics</label>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="message"></p>
+
+                <div class="button-group">
+                    <button type="submit" class="btn primary-btn">
+                        <i class="fas fa-chalkboard-teacher"></i> Register as Faculty
+                    </button>
+                </div>
+
+                <div class="link-row">
+                    <a href="login.html">Already registered? Sign In</a>
+                    <a href="../index.html">← Student Portal</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="teacher-register.js"></script>
+</body>
+</html>
+

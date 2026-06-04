@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>College LMS Dashboard</title>
+
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="dashboard.css">
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <!-- MAIN CONTAINER -->
+    <div class="dashboard-container">
+
+        <!-- HEADER -->
+        <header class="dashboard-header">
+
+            <div>
+
+                <h1>🎓 College LMS Dashboard</h1>
+
+                <p class="header-subtitle">
+                    Secure Student Management System
+                </p>
+
+            </div>
+
+            <button id="logoutBtn" class="logout-btn">
+                Logout
+            </button>
+            <div class="notification-wrapper">
+
+                <button id="notificationBtn">
+
+                    🔔
+
+                </button>
+
+                <div id="notificationPanel">
+
+                    <h3>Notifications</h3>
+
+                    <ul id="notificationList">
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME SECTION -->
+        <section class="welcome-section">
+
+            <h2>Welcome Admin 🚀</h2>
+
+            <p>
+                Manage students, courses, and LMS data securely.
+            </p>
+
+        </section>
+
+
+        <!-- ================================================ -->
+        <!-- STUDENT PORTAL SECTION (only shown to students)  -->
+        <!-- ================================================ -->
+        <section id="studentPortalSection" style="display: none;">
+
+            <!-- Tab Navigation -->
+            <div class="student-tabs" style="display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;">
+                <button class="tab-btn active" onclick="showStudentTab('timetable', this)" id="tabTimetable" style="flex: 1; padding: 14px 20px; border: 1px solid rgba(0,255,255,0.3); border-radius: 12px; background: rgba(0,255,255,0.15); color: white; cursor: pointer; font-size: 15px; font-family: 'Outfit', sans-serif; transition: 0.3s; font-weight: 600;">📅 Timetable</button>
+                <button class="tab-btn" onclick="showStudentTab('marks', this)" id="tabMarks" style="flex: 1; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); color: white; cursor: pointer; font-size: 15px; font-family: 'Outfit', sans-serif; transition: 0.3s; font-weight: 600;">🏆 My Marks</button>
+                <button class="tab-btn" onclick="showStudentTab('attendance', this)" id="tabAttendance" style="flex: 1; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); color: white; cursor: pointer; font-size: 15px; font-family: 'Outfit', sans-serif; transition: 0.3s; font-weight: 600;">📋 Attendance</button>
+                <button class="tab-btn" onclick="showStudentTab('assignments', this)" id="tabAssignments" style="flex: 1; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); color: white; cursor: pointer; font-size: 15px; font-family: 'Outfit', sans-serif; transition: 0.3s; font-weight: 600;">📝 Assignments</button>
+            </div>
+
+            <!-- TIMETABLE TAB -->
+            <div id="studentTabTimetable" class="student-tab-content student-section-card">
+                <h2>📅 Weekly Timetable</h2>
+                <div id="timetableGrid" style="margin-top: 20px; overflow-x: auto;">
+                    <table id="timetableTable" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: rgba(0,255,255,0.1);">
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: left;">Time</th>
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Monday</th>
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Tuesday</th>
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Wednesday</th>
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Thursday</th>
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Friday</th>
+                                <th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center;">Saturday</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MARKS TAB -->
+            <div id="studentTabMarks" class="student-tab-content student-section-card" style="display: none;">
+                <h2>🏆 My Academic Performance</h2>
+                <div id="studentMarksGrid" class="students-grid" style="margin-top: 20px;">
+                    <div class="empty-state"><h3>Loading marks... ⏳</h3></div>
+                </div>
+            </div>
+
+            <!-- ATTENDANCE TAB -->
+            <div id="studentTabAttendance" class="student-tab-content student-section-card" style="display: none;">
+                <h2>📋 My Attendance Records</h2>
+                <div id="studentAttendanceGrid" class="students-grid" style="margin-top: 20px;">
+                    <div class="empty-state"><h3>Loading attendance... ⏳</h3></div>
+                </div>
+            </div>
+
+            <!-- ASSIGNMENTS TAB -->
+            <div id="studentTabAssignments" class="student-tab-content student-section-card" style="display: none;">
+                <h2>📝 My Assignments</h2>
+                <div id="studentAssignmentsGrid" class="students-grid" style="margin-top: 20px;">
+                    <div class="empty-state"><h3>Loading assignments... ⏳</h3></div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ADD STUDENT FORM -->
+        <section id="addStudentSection" class="student-form-section">
+
+            <h2>Add New Student</h2>
+
+            <form id="studentForm">
+
+                <input type="text" id="studentName" placeholder="Enter student name" required>
+
+                <input type="number" id="studentRoll" placeholder="Enter roll number" required>
+
+                <input type="text" id="studentCourse" placeholder="Course" required>
+
+                <input type="text" id="studentSection" placeholder="Section (e.g. A, B)" required>
+
+                <input type="text" id="studentSubjects" placeholder="Subjects (e.g. Math, Science)" required>
+
+                <button type="submit">
+                    Add Student
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- STUDENTS SECTION -->
+        <section id="studentsListSection" class="students-section">
+
+            <div class="students-header" style="flex-direction: column; align-items: flex-start; gap: 15px;">
+                
+                <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                    <button id="backNavBtn" style="display: none; padding: 8px 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white; cursor: pointer; transition: 0.3s;">
+                        ← Back
+                    </button>
+                    <div id="breadcrumbNav" style="font-size: 18px; font-weight: 600; color: var(--cyan-glow);">
+                        Students List
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; width: 100%;">
+                    <input type="text" id="searchInput" placeholder="Search..." style="flex: 1;">
+                </div>
+
+            </div>
+
+            <div id="studentsGrid" class="students-grid">
+
+            </div>
+
+        </section>
+
+        <!-- ANALYTICS SECTION -->
+        <section id="analyticsSection" class="students-section" style="display: none;">
+            <h2>Section Analytics 📊</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px;">
+                <div class="student-card" style="padding: 20px;">
+                    <h3>Attendance Overview</h3>
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+                <div class="student-card" style="padding: 20px;">
+                    <h3>Grade Performance</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- COURSES SECTION -->
+        <section id="addCourseSection" class="student-form-section">
+
+            <h2>Add Course</h2>
+
+            <form id="courseForm">
+
+                <input type="text" id="courseTitle" placeholder="Course Title" required>
+
+                <input type="text" id="courseInstructor" placeholder="Instructor Name" required>
+
+                <input type="text" id="courseDuration" placeholder="Course Duration" required>
+
+                <button type="submit">
+                    Add Course
+                </button>
+
+            </form>
+
+        </section>
+
+        <section id="coursesListSection" class="students-section">
+
+            <h2>Courses List</h2>
+
+            <div id="coursesGrid" class="students-grid">
+
+            </div>
+
+        </section>
+        <!-- ATTENDANCE SECTION -->
+        <section id="markAttendanceSection" class="student-form-section">
+
+            <h2>Mark Attendance</h2>
+
+            <form id="attendanceForm">
+
+                <select id="attendanceStudent" required style="width: 100%; padding: 14px; margin-bottom: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(0, 0, 0, 0.2); color: white; outline: none; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <option value="" disabled selected>Select Student...</option>
+                </select>
+
+                <input type="text" id="attendanceCourse" placeholder="Course" required>
+
+                <input type="number" id="presentClasses" placeholder="Present Classes" required>
+
+                <input type="number" id="totalClasses" placeholder="Total Classes" required>
+
+                <button type="submit">
+                    Mark Attendance
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section id="attendanceListSection" class="students-section">
+
+            <h2>Attendance Records</h2>
+
+            <div id="attendanceGrid" class="students-grid">
+
+            </div>
+
+        </section>
+
+        <!-- MARKS SECTION -->
+        <section id="markStudentSection" class="student-form-section">
+
+            <h2>Give Marks 📝</h2>
+
+            <form id="marksForm">
+
+                <select id="marksStudent" required style="width: 100%; padding: 14px; margin-bottom: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(0, 0, 0, 0.2); color: white; outline: none; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <option value="" disabled selected>Select Student...</option>
+                </select>
+
+                <input type="text" id="marksCourse" placeholder="Course" required>
+
+                <input type="number" id="marksObtained" placeholder="Marks Obtained" required>
+
+                <input type="number" id="totalMarks" placeholder="Total Marks" required>
+
+                <button type="submit">
+                    Submit Marks
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- MARKS LIST SECTION -->
+        <section id="marksListSection" class="students-section">
+
+            <h2>Student Marks 🏆</h2>
+
+            <div id="marksGrid" class="students-grid">
+
+            </div>
+
+        </section>
+        
+        <!-- ASSIGNMENTS SECTION -->
+        <section id="createAssignmentSection" class="student-form-section">
+
+            <h2>Create Assignment</h2>
+
+            <form id="assignmentForm">
+
+                <input type="text" id="assignmentTitle" placeholder="Assignment Title" required>
+
+                <input type="text" id="assignmentCourse" placeholder="Course Name" required>
+
+                <input type="date" id="assignmentDeadline" required>
+
+                <button type="submit">
+                    Create Assignment
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section id="assignmentsListSection" class="students-section">
+
+            <h2>Assignments List</h2>
+
+            <div id="assignmentsGrid" class="students-grid">
+
+            </div>
+
+        </section>
+        <!-- FILE UPLOAD SECTION -->
+        <section id="uploadFileSection" class="student-form-section">
+
+            <h2>Upload Study Material 📂</h2>
+
+            <form id="uploadForm">
+
+                <input type="file" id="fileInput" required>
+
+                <button type="submit">
+                    Upload File
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- FILES LIST -->
+        <section id="filesListSection" class="students-section">
+
+            <h2>Uploaded Files</h2>
+
+            <div id="filesContainer" class="students-grid">
+
+            </div>
+
+        </section>
+        <!-- END OF DASHBOARD CONTENT -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration | College LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .success-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            color: #22c55e;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Real-time Validation Styles */
+        .input-group {
+            position: relative;
+        }
+
+        .validation-hint {
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+            transition: 0.3s;
+        }
+
+        .input-invalid {
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 8px rgba(255, 68, 68, 0.2);
+        }
+
+        .input-valid {
+            border-color: #00c851 !important;
+            box-shadow: 0 0 8px rgba(0, 200, 81, 0.2);
+        }
+
+        .status-icon {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Animated Particles -->
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+
+    <header class="main-header">
+        <div class="logo-area">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            <h1>College LMS</h1>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <section class="login-card" style="max-width: 550px;">
+            <h2>Student Registration 🎓</h2>
+            <p class="subtitle">Complete the form to get your auto-generated ID</p>
+
+            <form id="registerForm" novalidate>
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="studentName" placeholder="e.g. John Doe" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Select Course</label>
+                    <select id="course" required style="width: 100%; padding: 14px; background: rgba(0,0,0,0.2); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; outline: none;">
+                        <option value="" disabled selected>Choose your department...</option>
+                        <option value="BTECH CSE">B.Tech - Computer Science (CSE)</option>
+                        <option value="BTECH ME">B.Tech - Mechanical (ME)</option>
+                        <option value="BTECH ECE">B.Tech - Electronics (ECE)</option>
+                        <option value="BCA">BCA - Computer Applications</option>
+                        <option value="MCA">MCA - Computer Applications</option>
+                        <option value="MBA">MBA - Business Administration</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Section</label>
+                        <input type="text" id="section" placeholder="e.g. A" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="phone" placeholder="10-digit number" maxlength="10">
+                        <span class="status-icon" id="phoneIcon"></span>
+                        <div class="validation-hint" id="phoneHint" style="color: #ff4444;">Must be 10 digits</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="student@college.edu" required>
+                    <span class="status-icon" id="emailIcon"></span>
+                    <div class="validation-hint" id="emailHint" style="color: #ff4444;">Enter a valid email address</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Min. 6 chars (A-z, 0-9)" required>
+                    <span class="status-icon" id="passwordIcon"></span>
+                    <div class="validation-hint" id="passwordHint" style="color: #ff4444;">Min 6 chars, uppercase, lowercase & number</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Mailing Address</label>
+                    <textarea id="address" placeholder="Full residential address..." style="width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; min-height: 80px;"></textarea>
+                </div>
+
+                <p id="message"></p>
+
+                <div class="button-group">
+                    <button type="submit" class="btn primary-btn">Create Account</button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="index.html" class="forgot-link">Already have an account? Login here</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="register.js"></script>
+</body>
+
+</html>

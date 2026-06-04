@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Support | College LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --contact-accent: #00f0ff;
+            --contact-glow: rgba(0, 240, 255, 0.3);
+        }
+
+        body {
+            background:
+                radial-gradient(ellipse 70% 55% at 15% 15%, rgba(0, 112, 255, 0.14) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 85%, rgba(0, 240, 255, 0.08) 0%, transparent 60%),
+                linear-gradient(160deg, #03050a 0%, #060c18 60%, #080f1a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-card {
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            border-color: rgba(0, 240, 255, 0.12);
+            padding: 40px;
+        }
+
+        .card-top-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #0070ff, #00f0ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px var(--contact-glow);
+        }
+
+        .input-group select,
+        .input-group textarea,
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group select option {
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .input-group select:focus,
+        .input-group textarea:focus,
+        .input-group input:focus {
+            border-color: var(--contact-accent);
+            box-shadow: 0 0 16px var(--contact-glow);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #0070ff, #00f0ff);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 6px 20px var(--contact-glow);
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .primary-btn:hover {
+            box-shadow: 0 10px 35px rgba(0, 240, 255, 0.55);
+            transform: translateY(-2px);
+        }
+        
+        .alert-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            margin-bottom: 18px;
+            display: none;
+        }
+        .alert-error { background: rgba(239, 68, 68, 0.10); border: 1px solid rgba(239, 68, 68, 0.30); color: #fca5a5; }
+        .alert-success { background: rgba(34, 197, 94, 0.10); border: 1px solid rgba(34, 197, 94, 0.30); color: #86efac; }
+
+        .footer-secret {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.2);
+        }
+        .footer-secret a {
+            color: rgba(255,255,255,0.2);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer-secret a:hover { color: #ff4757; }
+        
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: var(--contact-accent); }
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="back-link">← Go Back</a>
+
+    <div class="content-area">
+        <section class="login-card">
+            <div class="card-top-icon">✉️</div>
+            <h2 style="text-align:center; margin-bottom:6px; font-size:1.7rem;">Contact Support</h2>
+            <p class="subtitle" style="text-align:center; color:rgba(255,255,255,0.6); margin-bottom:24px;">Submit a complaint or support request</p>
+
+            <div id="alertBox" class="alert-box"></div>
+
+            <form id="contactForm">
+                <div class="input-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="john@college.edu" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="role">I am a...</label>
+                    <select id="role" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher / Faculty</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" rows="5" placeholder="Please describe your issue in detail..." required></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="primary-btn">Submit Request</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Hidden Admin Link as requested -->
+    <div class="footer-secret">
+        &copy; 2026 College LMS | <a href="admin/login.html">System Management</a>
+    </div>
+
+    <script src="contact.js"></script>
+</body>
+</html>
+

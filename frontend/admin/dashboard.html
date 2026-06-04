@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | College LMS</title>
+    <meta name="description" content="Administrator control panel for College LMS — manage students, teachers, courses and more.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-icon">🛡️</div>
+        <div class="logo-text">
+            Admin Panel
+            <small>College LMS</small>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <a class="nav-item active" id="nav-overview" onclick="showSection('overview')">
+            <i class="fas fa-chart-pie"></i> Dashboard
+        </a>
+
+        <div class="nav-section-label">Management</div>
+        <a class="nav-item" id="nav-students" onclick="showSection('students')">
+            <i class="fas fa-user-graduate"></i> Students
+        </a>
+        <a class="nav-item" id="nav-teachers" onclick="showSection('teachers')">
+            <i class="fas fa-chalkboard-teacher"></i> Teachers
+        </a>
+        <a class="nav-item" id="nav-courses" onclick="showSection('courses')">
+            <i class="fas fa-book-open"></i> Courses
+        </a>
+
+        <div class="nav-section-label">Academic</div>
+        <a class="nav-item" id="nav-attendance" onclick="showSection('attendance')">
+            <i class="fas fa-clipboard-check"></i> Attendance
+        </a>
+        <a class="nav-item" id="nav-marks" onclick="showSection('marks')">
+            <i class="fas fa-trophy"></i> Marks
+        </a>
+        <a class="nav-item" id="nav-assignments" onclick="showSection('assignments')">
+            <i class="fas fa-file-alt"></i> Assignments
+        </a>
+
+        <div class="nav-section-label">System</div>
+        <a class="nav-item" id="nav-complaints" onclick="showSection('complaints')">
+            <i class="fas fa-headset"></i> Support Tickets
+        </a>
+        <a class="nav-item" id="nav-setup" onclick="showSection('setup')">
+            <i class="fas fa-cog"></i> Admin Setup
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="admin-avatar" id="sidebarInitial">A</div>
+        <div class="admin-info">
+            <div class="admin-name" id="sidebarName">Administrator</div>
+            <div class="admin-role">Super Admin</div>
+        </div>
+    </div>
+</aside>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════════════════ -->
+<div class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <h2 id="topbarTitle">Dashboard Overview</h2>
+            <p id="topbarSub">Welcome back, Administrator</p>
+        </div>
+        <div class="topbar-right">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="Search students, teachers…" oninput="handleGlobalSearch(this.value)">
+            </div>
+            <div class="icon-btn" title="Refresh data" onclick="refreshAll()">
+                <i class="fas fa-sync-alt"></i>
+            </div>
+            <div class="icon-btn logout-btn" title="Logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+        <!-- ════════════════════════════════════════
+             OVERVIEW SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-overview" class="fade-in">
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card red">
+                    <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                    <div class="stat-value" id="statStudents">—</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-card amber">
+                    <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="stat-value" id="statTeachers">—</div>
+                    <div class="stat-label">Faculty Members</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="stat-value" id="statCourses">—</div>
+                    <div class="stat-label">Active Courses</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <div class="stat-value" id="statAttendance">—</div>
+                    <div class="stat-label">Avg. Attendance</div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-icon" style="background:rgba(191,95,255,0.12);color:#bf5fff"><i class="fas fa-file-alt"></i></div>
+                    <div class="stat-value" id="statAssignments">—</div>
+                    <div class="stat-label">Assignments</div>
+                </div>
+            </div>
+
+            <!-- Quick Tables Row -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+                <!-- Recent Students -->
+                <div class="glass-panel fade-in">
+                    <div class="panel-header">
+                        <div>
+                            <h3>👨‍🎓 Recent Students</h3>
+                            <p>Latest enrolled students</p>
+                        </div>
+                        <button class="action-btn btn-edit" onclick="showSection('students')">View All</button>
+                    </div>
+                    <div id="recentStudentsBody" style="overflow:auto; max-height:300px;">
+                        <table class="data-table">
+                            <thead><tr><th>Name</th><th>Roll No.</th><th>Course</th></tr></thead>
+                            <tbody id="recentStudentsTbody"><tr><td colspan="3" class="empty-state"><p>Loading…</p></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Teachers -->
+                <div class="glass-panel fade-in">
+                    <div class="panel-header">
+                        <div>
+                            <h3>👨‍🏫 Faculty Members</h3>
+                            <p>Registered teaching staff</p>
+                        </div>
+                        <button class="action-btn btn-edit" onclick="showSection('teachers')">View All</button>
+                    </div>
+                    <div id="recentTeachersBody" style="overflow:auto; max-height:300px;">
+                        <table class="data-table">
+                            <thead><tr><th>Name</th><th>Department</th><th>Courses</th></tr></thead>
+                            <tbody id="recentTeachersTbody"><tr><td colspan="3" class="empty-state"><p>Loading…</p></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             STUDENTS SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-students" style="display:none;" class="fade-in">
+            <div class="section-heading">
+                <h2>👨‍🎓 Student Management</h2>
+            </div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>All Enrolled Students</h3><p id="studentCount">Loading…</p></div>
+                </div>
+                <div class="filter-strip">
+                    <input class="filter-input" id="studentSearch" placeholder="🔍  Search by name or roll no…" oninput="filterStudents()">
+                    <input class="filter-input" id="studentCourseFilter" placeholder="Filter by course…" oninput="filterStudents()">
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table" id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Roll Number</th>
+                                <th>Course</th>
+                                <th>Section</th>
+                                <th>Subjects</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTbody">
+                            <tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading students…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             TEACHERS SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-teachers" style="display:none;" class="fade-in">
+            <div class="section-heading">
+                <h2>👨‍🏫 Teacher Management</h2>
+            </div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>All Faculty Members</h3><p id="teacherCount">Loading…</p></div>
+                </div>
+                <div class="filter-strip">
+                    <input class="filter-input" id="teacherSearch" placeholder="🔍  Search by name or ID…" oninput="filterTeachers()">
+                    <input class="filter-input" id="teacherDeptFilter" placeholder="Filter by department…" oninput="filterTeachers()">
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table" id="teachersTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Teacher ID</th>
+                                <th>Department</th>
+                                <th>Assigned Courses</th>
+                                <th>Assigned Subjects</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachersTbody">
+                            <tr><td colspan="7" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading teachers…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             COURSES SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-courses" style="display:none;" class="fade-in">
+            <div class="section-heading">
+                <h2>📚 Course Overview</h2>
+            </div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>Enrolled Course Distribution</h3><p>Students grouped by course</p></div>
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Course</th><th>Students Enrolled</th><th>Sections</th></tr></thead>
+                        <tbody id="coursesTbody"><tr><td colspan="4" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             ATTENDANCE SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-attendance" style="display:none;" class="fade-in">
+            <div class="section-heading"><h2>📊 Attendance Records</h2></div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>All Attendance Records</h3><p id="attendanceCount">Loading…</p></div>
+                </div>
+                <div class="filter-strip">
+                    <input class="filter-input" id="attSearch" placeholder="🔍  Search by student name…" oninput="filterAttendance()">
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Student</th><th>Roll No.</th><th>Subject</th><th>Present</th><th>Total</th><th>Percentage</th><th>Actions</th></tr></thead>
+                        <tbody id="attendanceTbody"><tr><td colspan="8" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             MARKS SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-marks" style="display:none;" class="fade-in">
+            <div class="section-heading"><h2>🏆 Marks & Grades</h2></div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>All Mark Records</h3><p id="marksCount">Loading…</p></div>
+                </div>
+                <div class="filter-strip">
+                    <input class="filter-input" id="marksSearch" placeholder="🔍  Search by student name…" oninput="filterMarks()">
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Student</th><th>Roll No.</th><th>Subject</th><th>Obtained</th><th>Total</th><th>Grade</th><th>Actions</th></tr></thead>
+                        <tbody id="marksTbody"><tr><td colspan="8" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             ASSIGNMENTS SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-assignments" style="display:none;" class="fade-in">
+            <div class="section-heading"><h2>📝 Assignments</h2></div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>All Assignments</h3><p id="assignmentCount">Loading…</p></div>
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Title</th><th>Course</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="assignmentsTbody"><tr><td colspan="6" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             COMPLAINTS & SUPPORT SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-complaints" style="display:none;" class="fade-in">
+            <div class="section-heading"><h2>🎧 Support & Complaints</h2></div>
+            <div class="glass-panel">
+                <div class="panel-header">
+                    <div><h3>User Submitted Tickets</h3><p id="complaintCount">Loading…</p></div>
+                </div>
+                <div style="overflow:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="complaintsTbody">
+                            <tr><td colspan="6" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">Loading…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════
+             ADMIN SETUP SECTION
+        ════════════════════════════════════════ -->
+        <section id="section-setup" style="display:none;" class="fade-in">
+            <div class="section-heading"><h2>⚙️ Admin Setup</h2></div>
+            <div class="glass-panel" style="max-width:520px;">
+                <div class="panel-header"><div><h3>Create Admin Account</h3><p>One-time setup — requires setup key</p></div></div>
+                <div style="padding:28px;">
+                    <div style="margin-bottom:14px;">
+                        <div class="modal-label">Full Name</div>
+                        <input class="modal-input" id="setupName" placeholder="Admin full name">
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <div class="modal-label">Email</div>
+                        <input class="modal-input" type="email" id="setupEmail" placeholder="admin@college.edu">
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <div class="modal-label">Password (8+ chars)</div>
+                        <input class="modal-input" type="password" id="setupPassword" placeholder="Strong password">
+                    </div>
+                    <div style="margin-bottom:20px;">
+                        <div class="modal-label">Setup Key</div>
+                        <input class="modal-input" type="password" id="setupKey" placeholder="COLLEGE_ADMIN_2026">
+                    </div>
+                    <div id="setupMsg" style="margin-bottom:14px;font-size:0.875rem;min-height:20px;"></div>
+                    <button class="btn-primary" onclick="createAdmin()">
+                        <i class="fas fa-shield-halved"></i> Create Admin Account
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- /.page-body -->
+</div><!-- /.main-content -->
+
+<!-- ══════════════════════════════════════════════════════════
+     ASSIGN MODAL (Teacher Course/Subject Assignment)
+══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="assignModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <h3>📋 Assign Courses & Subjects</h3>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:20px;" id="assignTeacherName"></p>
+
+        <div class="modal-label">Courses</div>
+        <div class="check-grid" id="assignCourseGrid"></div>
+
+        <div class="modal-label" style="margin-top:18px;">Subjects</div>
+        <div class="check-grid" id="assignSubjectGrid"></div>
+
+        <div class="modal-actions" style="margin-top:22px;">
+            <button class="btn-cancel" onclick="document.getElementById('assignModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" onclick="saveAssignment()" style="flex:1;">Save Assignment</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Teacher Profile Modal -->
+<div class="modal-overlay" id="editTeacherModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:480px;">
+        <h3>👨‍🏫 Edit Teacher Profile</h3>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:20px;">Update details or reset password for the faculty member.</p>
+
+        <input type="hidden" id="editTeacherId">
+
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Full Name</div>
+            <input class="modal-input" id="editTeacherName" placeholder="Full name">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Email</div>
+            <input class="modal-input" type="email" id="editTeacherEmail" placeholder="Email address">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">New Password (leave blank to keep current)</div>
+            <input class="modal-input" type="password" id="editTeacherPassword" placeholder="Enter new password">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Phone</div>
+            <input class="modal-input" id="editTeacherPhone" placeholder="Phone number">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Department</div>
+            <input class="modal-input" id="editTeacherDept" placeholder="Department (e.g. Computer Science)">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Qualification</div>
+            <input class="modal-input" id="editTeacherQual" placeholder="Qualification (e.g. Ph.D)">
+        </div>
+        <div style="margin-bottom:18px;">
+            <div class="modal-label">Experience</div>
+            <input class="modal-input" id="editTeacherExp" placeholder="Experience (e.g. 5 Years)">
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('editTeacherModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" onclick="saveTeacherProfile()" style="flex:1;">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" id="confirmModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:400px;">
+        <h3 style="color:#ff4757;">⚠️ Confirm Deletion</h3>
+        <p style="color:rgba(255,255,255,0.6); margin:16px 0;" id="confirmMsg">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('confirmModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" id="confirmOkBtn" style="flex:1;">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Student Modal -->
+<div class="modal-overlay" id="editStudentModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:480px;">
+        <h3>👨‍🎓 Edit Student Profile</h3>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:20px;">Update student details, password, and course enrollment.</p>
+
+        <input type="hidden" id="editStudentId">
+        <input type="hidden" id="editStudentRoll">
+
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Full Name</div>
+            <input class="modal-input" id="editStudentName" placeholder="Full name">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Email</div>
+            <input class="modal-input" type="email" id="editStudentEmail" placeholder="Email address">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">New Password (leave blank to keep current)</div>
+            <input class="modal-input" type="password" id="editStudentPassword" placeholder="Enter new password">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Course (e.g. BTECH CSE, MCA, etc.)</div>
+            <input class="modal-input" id="editStudentCourse" placeholder="Course title">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Section</div>
+            <input class="modal-input" id="editStudentSection" placeholder="Section (e.g. A, B)">
+        </div>
+        <div style="margin-bottom:18px;">
+            <div class="modal-label">Subjects (comma separated)</div>
+            <input class="modal-input" id="editStudentSubjects" placeholder="Mathematics, Physics, DBMS">
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('editStudentModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" onclick="saveStudentProfile()" style="flex:1;">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Attendance Modal -->
+<div class="modal-overlay" id="editAttendanceModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:400px;">
+        <h3>📊 Edit Attendance</h3>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:20px;" id="editAttendanceInfo"></p>
+
+        <input type="hidden" id="editAttendanceRoll">
+        <input type="hidden" id="editAttendanceSubject">
+        <input type="hidden" id="editAttendanceName">
+
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Present Classes</div>
+            <input class="modal-input" type="number" id="editPresentClasses" min="0">
+        </div>
+        <div style="margin-bottom:18px;">
+            <div class="modal-label">Total Classes</div>
+            <input class="modal-input" type="number" id="editTotalClasses" min="0">
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('editAttendanceModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" onclick="saveAttendanceRecord()" style="flex:1;">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Marks Modal -->
+<div class="modal-overlay" id="editMarksModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:400px;">
+        <h3>🏆 Edit Student Mark</h3>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:20px;" id="editMarksInfo"></p>
+
+        <input type="hidden" id="editMarksRoll">
+        <input type="hidden" id="editMarksSubject">
+        <input type="hidden" id="editMarksName">
+
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Marks Obtained</div>
+            <input class="modal-input" type="number" id="editMarksObtained" min="0">
+        </div>
+        <div style="margin-bottom:18px;">
+            <div class="modal-label">Total Marks</div>
+            <input class="modal-input" type="number" id="editMarksTotal" min="0">
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('editMarksModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" onclick="saveMarksRecord()" style="flex:1;">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Assignment Modal -->
+<div class="modal-overlay" id="editAssignmentModal" style="display:none;" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width:450px;">
+        <h3>📝 Edit Assignment</h3>
+        <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:20px;">Update assignment details and deadline.</p>
+
+        <input type="hidden" id="editAssignmentId">
+
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Title</div>
+            <input class="modal-input" id="editAssignmentTitle" placeholder="Assignment title">
+        </div>
+        <div style="margin-bottom:12px;">
+            <div class="modal-label">Course</div>
+            <input class="modal-input" id="editAssignmentCourse" placeholder="Course">
+        </div>
+        <div style="margin-bottom:18px;">
+            <div class="modal-label">Deadline</div>
+            <input class="modal-input" type="datetime-local" id="editAssignmentDeadline">
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="document.getElementById('editAssignmentModal').style.display='none'">Cancel</button>
+            <button class="btn-primary" onclick="saveAssignmentDetails()" style="flex:1;">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
+
