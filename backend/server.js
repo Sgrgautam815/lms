@@ -36,6 +36,7 @@ const getAllowedOrigins = () => {
     const allowedOrigins = [
         // PRODUCTION - Vercel Frontend (REQUIRED on Render)
         "https://lms-one-lyart.vercel.app",
+        "https://lmsgautam.vercel.app",
         // ENV VAR OVERRIDE - for flexibility across environments
         process.env.PRODUCTION_FRONTEND_URL,
         // LOCAL DEVELOPMENT
