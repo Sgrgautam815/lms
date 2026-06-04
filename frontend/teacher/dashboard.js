@@ -7,7 +7,7 @@ const assignedCourses = JSON.parse(localStorage.getItem("assignedCourses") || '[
 const assignedSubjects = JSON.parse(localStorage.getItem("assignedSubjects") || '["Computer Networks"]');
 
 const apiBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
-    ? 'http://localhost:3000'
+    ? 'https://lms-dra8.onrender.com'
     : 'https://lms-dra8.onrender.com';
 
 
