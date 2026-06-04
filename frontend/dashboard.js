@@ -6,11 +6,11 @@
 (function() {
     const originalFetch = window.fetch;
     window.fetch = function(input, init) {
-        if (typeof input === 'string' && input.includes('https://lms-backend-pksf.onrender.com')) {
+        if (typeof input === 'string' && input.includes('https://lms-dra8.onrender.com')) {
             const apiBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
                 ? 'http://localhost:3000'
-                : 'https://lms-backend-pksf.onrender.com';
-            input = input.replace('https://lms-backend-pksf.onrender.com', apiBase);
+                : 'https://lms-dra8.onrender.com';
+            input = input.replace('https://lms-dra8.onrender.com', apiBase);
         }
         return originalFetch(input, init);
     };
@@ -209,7 +209,7 @@ async function loadStudentMarks() {
     const grid = document.getElementById("studentMarksGrid");
     if (!grid) return;
     try {
-        const res = await fetch("https://lms-backend-pksf.onrender.com/marks", {
+        const res = await fetch("https://lms-dra8.onrender.com/marks", {
             headers: { Authorization: `Bearer ${token}` }
         });
         const marks = await res.json();
@@ -244,7 +244,7 @@ async function loadStudentAttendance() {
     const grid = document.getElementById("studentAttendanceGrid");
     if (!grid) return;
     try {
-        const res = await fetch("https://lms-backend-pksf.onrender.com/attendance", {
+        const res = await fetch("https://lms-dra8.onrender.com/attendance", {
             headers: { Authorization: `Bearer ${token}` }
         });
         const records = await res.json();
@@ -279,7 +279,7 @@ async function loadStudentAssignments() {
     const grid = document.getElementById("studentAssignmentsGrid");
     if (!grid) return;
     try {
-        const res = await fetch("https://lms-backend-pksf.onrender.com/assignments", {
+        const res = await fetch("https://lms-dra8.onrender.com/assignments", {
             headers: { Authorization: `Bearer ${token}` }
         });
         const all = await res.json();
@@ -406,7 +406,7 @@ async function fetchStudents() {
         `;
 
         const response = await fetch(
-            "https://lms-backend-pksf.onrender.com/students",
+            "https://lms-dra8.onrender.com/students",
             {
 
                 headers: {
@@ -798,7 +798,7 @@ studentForm.addEventListener("submit", async (event) => {
     try {
 
         const response = await fetch(
-            "https://lms-backend-pksf.onrender.com/students",
+            "https://lms-dra8.onrender.com/students",
             {
 
                 method: "POST",
@@ -865,7 +865,7 @@ async function deleteStudent(id) {
 
         const response = await fetch(
 
-            `https://lms-backend-pksf.onrender.com/students/${id}`,
+            `https://lms-dra8.onrender.com/students/${id}`,
 
             {
 
@@ -906,7 +906,7 @@ async function resetStudentPassword(collegeId) {
     const newPass = prompt("Enter new password for this student:");
     if (!newPass) return;
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/users/${collegeId}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/users/${collegeId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ password: newPass })
@@ -925,7 +925,7 @@ async function editStudent(id, oldName, oldRoll, oldCourse, oldSection, oldSubje
     const subjects = subjectsStr.split(",").map(s => s.trim()).filter(s => s !== "");
 
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/students/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/students/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ name, rollNumber, course, section, subjects })
@@ -942,7 +942,7 @@ async function fetchCourses() {
     try {
 
         const response = await fetch(
-            "https://lms-backend-pksf.onrender.com/courses",
+            "https://lms-dra8.onrender.com/courses",
             {
 
                 headers: {
@@ -1039,7 +1039,7 @@ courseForm.addEventListener("submit", async (event) => {
     try {
 
         const response = await fetch(
-            "https://lms-backend-pksf.onrender.com/courses",
+            "https://lms-dra8.onrender.com/courses",
             {
 
                 method: "POST",
@@ -1091,7 +1091,7 @@ courseForm.addEventListener("submit", async (event) => {
 async function deleteCourse(id) {
     if (!confirm("Delete this course?")) return;
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/courses/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/courses/${id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -1105,7 +1105,7 @@ async function editCourse(id, oldTitle, oldInstructor, oldDuration) {
     const duration = prompt("Duration:", oldDuration) || oldDuration;
 
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/courses/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/courses/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ title, instructor, duration })
@@ -1122,7 +1122,7 @@ async function fetchAttendance() {
     try {
 
         const response = await fetch(
-            "https://lms-backend-pksf.onrender.com/attendance",
+            "https://lms-dra8.onrender.com/attendance",
             {
 
                 headers: {
@@ -1226,7 +1226,7 @@ attendanceForm.addEventListener(
         try {
 
             const response = await fetch(
-                "https://lms-backend-pksf.onrender.com/attendance",
+                "https://lms-dra8.onrender.com/attendance",
                 {
 
                     method: "POST",
@@ -1279,7 +1279,7 @@ attendanceForm.addEventListener(
 
 async function fetchMarks() {
     try {
-        const response = await fetch("https://lms-backend-pksf.onrender.com/marks", {
+        const response = await fetch("https://lms-dra8.onrender.com/marks", {
             headers: { Authorization: `Bearer ${token}` }
         });
         allMarks = await response.json();
@@ -1338,7 +1338,7 @@ if (marksForm) {
         const totalMarks = document.getElementById("totalMarks").value;
 
         try {
-            const response = await fetch("https://lms-backend-pksf.onrender.com/marks", {
+            const response = await fetch("https://lms-dra8.onrender.com/marks", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1371,7 +1371,7 @@ async function fetchAssignments() {
     try {
 
         const response = await fetch(
-            "https://lms-backend-pksf.onrender.com/assignments",
+            "https://lms-dra8.onrender.com/assignments",
             {
 
                 headers: {
@@ -1478,7 +1478,7 @@ assignmentForm.addEventListener(
         try {
 
             const response = await fetch(
-                "https://lms-backend-pksf.onrender.com/assignments",
+                "https://lms-dra8.onrender.com/assignments",
                 {
 
                     method: "POST",
@@ -1533,7 +1533,7 @@ assignmentForm.addEventListener(
 async function deleteAssignment(id) {
     if (!confirm("Delete this assignment?")) return;
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/assignments/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/assignments/${id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -1547,7 +1547,7 @@ async function editAssignment(id, oldTitle, oldCourse, oldDeadline) {
     const deadline = prompt("Deadline (YYYY-MM-DD):", oldDeadline) || oldDeadline;
 
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/assignments/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/assignments/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ title, course, deadline })
@@ -1560,7 +1560,7 @@ async function editAttendance(id, oldPresent, oldTotal) {
     const presentClasses = prompt("Present Classes:", oldPresent) || oldPresent;
     const totalClasses = prompt("Total Classes:", oldTotal) || oldTotal;
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/attendance/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/attendance/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ presentClasses: Number(presentClasses), totalClasses: Number(totalClasses) })
@@ -1573,7 +1573,7 @@ async function editMarks(id, oldObtained, oldTotal) {
     const marksObtained = prompt("Marks Obtained:", oldObtained) || oldObtained;
     const totalMarks = prompt("Total Marks:", oldTotal) || oldTotal;
     try {
-        const response = await fetch(`https://lms-backend-pksf.onrender.com/marks/${id}`, {
+        const response = await fetch(`https://lms-dra8.onrender.com/marks/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify({ marksObtained: Number(marksObtained), totalMarks: Number(totalMarks) })
@@ -1621,7 +1621,7 @@ uploadForm.addEventListener(
             const response =
                 await fetch(
 
-                    "https://lms-backend-pksf.onrender.com/upload",
+                    "https://lms-dra8.onrender.com/upload",
 
                     {
 
@@ -1699,7 +1699,7 @@ async function fetchFiles() {
         const response =
             await fetch(
 
-                "https://lms-backend-pksf.onrender.com/files",
+                "https://lms-dra8.onrender.com/files",
 
                 {
 

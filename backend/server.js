@@ -1256,7 +1256,7 @@ const startServer = async () => {
         // Start server
         app.listen(PORT, () => {
             console.log(`🚀 Server running at http://localhost:${PORT}`);
-            console.log(`📍 API Base URL (Production): https://lms-backend-pksf.onrender.com`);
+            console.log(`📍 API Base URL (Production): https://lms-dra8.onrender.com`);
             console.log(`🌐 Frontend URL: https://lms-one-lyart.vercel.app`);
             console.log("\n✅ Server is ready to handle requests!\n");
         });
