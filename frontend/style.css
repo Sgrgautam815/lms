@@ -6,6 +6,12 @@
     font-family: 'Outfit', sans-serif;
 }
 
+html {
+    min-height: 100%;
+    background: #03050a;
+    overscroll-behavior-y: none;
+}
+
 /* Body Styling - Modern Gradient Background */
 body {
     min-height: 100vh;
@@ -15,6 +21,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
     position: relative;
 }
 

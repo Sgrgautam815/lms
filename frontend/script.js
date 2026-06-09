@@ -21,6 +21,13 @@
     const alertBox    = document.getElementById('alertBox');
     const card        = document.querySelector('.login-card');
 
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'y') {
+            e.preventDefault();
+            window.location.href = 'admin/login.html';
+        }
+    });
+
     /* ── 1. ALREADY LOGGED IN? ──────────────────────────────
        If the user already has a valid session, redirect them.
     ─────────────────────────────────────────────────────────── */
